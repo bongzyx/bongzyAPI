@@ -10,3 +10,4 @@ services:
     environment:
       FLASK_ENV: development
       TZ: Asia/Singapore
+    container_name: bongzy_api

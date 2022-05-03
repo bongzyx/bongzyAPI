@@ -61,7 +61,6 @@ def get_camera():
 
         img = Image.open(io.BytesIO(data))
         draw = ImageDraw.Draw(img)
-        print(app.root_path)
         font = ImageFont.truetype(f"{app.root_path}/assets/Rubik-Bold.ttf", 72)
         draw.text(
             (100, 100),
@@ -90,6 +89,10 @@ def get_bus():
             headers={"AccountKey": lta_env.get("AccountKey")},
         )
         data = json.loads(r.content)
+
+        f = open(f"{app.root_path}/assets/BusStops.json")
+        bus_stops_data = json.load(f)["data"]
+
         if data["Services"]:
             all_bus_services = []
             for service in data["Services"]:
@@ -119,8 +122,14 @@ def get_bus():
                     single_bus_info["timings"].append(next_dict3)
                 print(next_dict)
                 all_bus_services.append(single_bus_info)
-            return jsonify(all_bus_services)
-
+            return jsonify(
+                {
+                    "info": list(
+                        filter(lambda x: x["BusStopCode"] == str(code), bus_stops_data)
+                    ),
+                    "data": all_bus_services,
+                }
+            )
         return data
     return "invalid bus stop code"
 
