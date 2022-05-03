@@ -58,8 +58,8 @@ def get_camera():
 
         img = Image.open(io.BytesIO(data))
         draw = ImageDraw.Draw(img)
-
-        font = ImageFont.truetype(r'./assets/Rubik-Bold.ttf', 72)
+        print(app.root_path)
+        font = ImageFont.truetype(f'{app.root_path}/assets/Rubik-Bold.ttf', 72)
         draw.text((100, 100), datetime.fromisoformat(c_timestamp).strftime("%H:%M   %d-%m-%Y"), fill=(
             255, 255, 255), font=font)
 
