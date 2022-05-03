@@ -9,3 +9,4 @@ services:
     #   - ./api:/api
     environment:
       FLASK_ENV: development
+      TZ: Asia/Singapore
