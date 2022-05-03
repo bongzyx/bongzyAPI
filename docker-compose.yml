@@ -1,6 +1,8 @@
 services:
   api:
-    build: ./api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
     ports:
       - "4656:4656"
     # volumes:
