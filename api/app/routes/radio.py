@@ -1,3 +1,4 @@
+from cmath import sin
 import stat
 from dotenv import dotenv_values
 from datetime import datetime
@@ -5,6 +6,7 @@ from flask import Blueprint, jsonify, request
 from app import app
 import json
 import requests
+import xmltodict
 
 radio = Blueprint("radio", __name__, url_prefix="/radio")
 
@@ -32,28 +34,70 @@ def get_mediacorp_station():
     ]
     if stationName in station_list:
         r = requests.get(
-            f"https://www.melisten.sg/api/streaminfo/public/nowplaying?mountName={stationName}&numberToFetch={count}&eventType=track"
+            f"https://np.tritondigital.com/public/nowplaying?mountName={stationName}&numberToFetch={count}&eventType=track"
         )
-        single_station_info = json.loads(r.content)
-        return jsonify(
-            {
-                "stationName": stationName,
-                "data": single_station_info[0]
-                if len(single_station_info) != 0
-                else single_station_info,
-            }
-        )
+        single_station_info = xmltodict.parse(r.content)
+        if single_station_info["nowplaying-info-list"]:
+            return jsonify(
+                {
+                    "stationName": stationName,
+                    "timestamp": single_station_info["nowplaying-info-list"][
+                        "nowplaying-info"
+                    ]["@timestamp"],
+                    "artist": single_station_info["nowplaying-info-list"][
+                        "nowplaying-info"
+                    ]["property"][3]["#text"],
+                    "title": single_station_info["nowplaying-info-list"][
+                        "nowplaying-info"
+                    ]["property"][2]["#text"],
+                    "cueTimeStart": single_station_info["nowplaying-info-list"][
+                        "nowplaying-info"
+                    ]["property"][1]["#text"],
+                    "cueTimeDuration": single_station_info["nowplaying-info-list"][
+                        "nowplaying-info"
+                    ]["property"][0]["#text"],
+                    "mergedName": single_station_info["nowplaying-info-list"][
+                        "nowplaying-info"
+                    ]["property"][3]["#text"]
+                    + " - "
+                    + single_station_info["nowplaying-info-list"]["nowplaying-info"][
+                        "property"
+                    ][2]["#text"],
+                }
+            )
+        return jsonify([])
     else:
         all_stations_data = []
         for s in station_list:
             r = requests.get(
-                f"https://www.melisten.sg/api/streaminfo/public/nowplaying?mountName={s}&numberToFetch={count}&eventType=track"
+                f"https://np.tritondigital.com/public/nowplaying?mountName={s}&numberToFetch={count}&eventType=track"
             )
-            clean_data = json.loads(r.content)
-            all_stations_data.append(
-                {
+            single_station_info = xmltodict.parse(r.content)
+            if single_station_info["nowplaying-info-list"]:
+                clean_data = {
                     "stationName": s,
-                    "data": clean_data[0] if len(clean_data) != 0 else clean_data,
+                    "timestamp": single_station_info["nowplaying-info-list"][
+                        "nowplaying-info"
+                    ]["@timestamp"],
+                    "artist": single_station_info["nowplaying-info-list"][
+                        "nowplaying-info"
+                    ]["property"][3]["#text"],
+                    "title": single_station_info["nowplaying-info-list"][
+                        "nowplaying-info"
+                    ]["property"][2]["#text"],
+                    "cueTimeStart": single_station_info["nowplaying-info-list"][
+                        "nowplaying-info"
+                    ]["property"][1]["#text"],
+                    "cueTimeDuration": single_station_info["nowplaying-info-list"][
+                        "nowplaying-info"
+                    ]["property"][0]["#text"],
+                    "mergedName": single_station_info["nowplaying-info-list"][
+                        "nowplaying-info"
+                    ]["property"][3]["#text"]
+                    + " - "
+                    + single_station_info["nowplaying-info-list"]["nowplaying-info"][
+                        "property"
+                    ][2]["#text"],
                 }
-            )
+                all_stations_data.append(clean_data)
         return jsonify(all_stations_data)

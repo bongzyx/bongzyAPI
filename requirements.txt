@@ -3,3 +3,4 @@ flask_cors
 python_dotenv
 pillow
 requests
+xmltodict
