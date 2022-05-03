@@ -120,7 +120,7 @@ def get_latest_picture():
             background.paste(foreground, mask=foreground)
 
             draw = ImageDraw.Draw(background)
-            font = ImageFont.truetype(r"Rubik-Bold.ttf", 22)
+            font = ImageFont.truetype(f"{app.root_path}/assets/Rubik-Bold.ttf", 22)
             draw.text(
                 (background.size[0] - 255, background.size[1] - 70),
                 loop_time.strftime("%H:%M   %d-%m-%Y"),
