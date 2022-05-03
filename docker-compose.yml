@@ -3,15 +3,7 @@ services:
     build: ./api
     ports:
       - "4656:4656"
-    volumes:
-      - ./api:/api
+    # volumes:
+    #   - ./api:/api
     environment:
       FLASK_ENV: development
-  web:
-    build: ./frontend
-    ports:
-      - "2456:2456"
-    volumes:
-      - ./frontend:/usr/src/app
-    depends_on:
-      - api

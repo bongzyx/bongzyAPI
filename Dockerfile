@@ -11,4 +11,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD [ "python", "api.py" ]
+EXPOSE 4656
+
+CMD [ "python", "api/run.py" ]
