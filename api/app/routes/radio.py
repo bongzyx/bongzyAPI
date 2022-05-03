@@ -35,7 +35,14 @@ def get_mediacorp_station():
             f"https://www.melisten.sg/api/streaminfo/public/nowplaying?mountName={stationName}&numberToFetch={count}&eventType=track"
         )
         single_station_info = json.loads(r.content)
-        return jsonify(single_station_info)
+        return jsonify(
+            {
+                "stationName": stationName,
+                "data": single_station_info[0]
+                if len(single_station_info) != 0
+                else single_station_info,
+            }
+        )
     else:
         all_stations_data = []
         for s in station_list:
