@@ -14,6 +14,9 @@ transport = Blueprint("transport", __name__, url_prefix="/transport")
 
 lta_env = dotenv_values("lta.env")
 
+f_camera_locations = open(f"{app.root_path}/assets/camera_location.json")
+camera_locations = json.load(f_camera_locations)["data"]
+
 
 @transport.get("/carparkLots")
 def get_carpark_lots():
@@ -44,22 +47,23 @@ def get_camera():
     r = requests.get(
         f'https://api.data.gov.sg/v1/transport/traffic-images?date_time={now.strftime("%Y-%m-%dT%H:%M:%S")}'
     )
-    data = json.loads(r.content)
-    c_timestamp = ""
+    res_data = json.loads(r.content)
+
     if location:
+        c_timestamp = ""
         if location == "wdls_bridge":
-            for c in data["items"][0]["cameras"]:
+            for c in res_data["items"][0]["cameras"]:
                 if c["camera_id"] == "2701":
-                    data = requests.get(c["image"]).content
+                    res_data = requests.get(c["image"]).content
                     c_timestamp = c["timestamp"]
 
         if location == "wdls_checkpoint":
-            for c in data["items"][0]["cameras"]:
+            for c in res_data["items"][0]["cameras"]:
                 if c["camera_id"] == "2702":
-                    data = requests.get(c["image"]).content
+                    res_data = requests.get(c["image"]).content
                     c_timestamp = c["timestamp"]
 
-        img = Image.open(io.BytesIO(data))
+        img = Image.open(io.BytesIO(res_data))
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype(f"{app.root_path}/assets/Rubik-Bold.ttf", 72)
         draw.text(
@@ -75,7 +79,16 @@ def get_camera():
         response = make_response(img)
         response.headers.set("Content-Type", "image/png")
         return response
-    return data
+
+    for cam_group in camera_locations:
+        for area_cam in cam_group["cameras"]:
+            for c in res_data["items"][0]["cameras"]:
+                if c["camera_id"] == area_cam["cameraId"]:
+                    area_cam["imageUrl"] = c["image"]
+                    area_cam["imageMetadata"] = c["image_metadata"]
+                    area_cam["timestamp"] = c["timestamp"]
+
+    return jsonify(camera_locations)
 
 
 @transport.get("/busArrival")
