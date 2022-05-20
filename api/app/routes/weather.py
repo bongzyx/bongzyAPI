@@ -84,6 +84,16 @@ def get_humidity():
     return data
 
 
+@weather.get("/airtemperature")
+def get_airtemperature():
+    now = datetime.now()
+    r = requests.get(
+        f'https://api.data.gov.sg/v1/environment/air-temperature?date_time={now.strftime("%Y-%m-%dT%H:%M:%S")}'
+    )
+    data = json.loads(r.content)
+    return data
+
+
 @weather.get("/rainingAreas")
 def get_raining_areas():
     a, img = get_latest_picture()
