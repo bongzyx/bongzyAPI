@@ -170,7 +170,7 @@ def get_bus_info():
     )
 
     def get_sequence(val):
-        return float(val.get("StopSequence"))
+        return int(val.get("Distance"))
 
     result_list.sort(key=get_sequence)
     if len(result_list) != 0:
