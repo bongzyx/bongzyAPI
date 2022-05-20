@@ -92,7 +92,7 @@ def get_camera():
 
 
 @transport.get("/busArrival")
-def get_bus():
+def get_bus_arrival():
     args = request.args
     code = args.get("code")
 
@@ -152,3 +152,40 @@ def calc_relative_time(time):
     next_timing = datetime.fromisoformat(time).replace(tzinfo=None)
     time_diff = round((next_timing - current_time).total_seconds() / 60)
     return "Arr" if time_diff <= 1 else time_diff
+
+
+@transport.get("/busInfo")
+def get_bus_info():
+    args = request.args
+    bus_code = args.get("bus")
+
+    bus_routes_file = open(f"{app.root_path}/assets/BusRoutes.json")
+    bus_routes_data = json.load(bus_routes_file)["data"]
+
+    bus_stops_file = open(f"{app.root_path}/assets/BusStops.json")
+    bus_stops_data = json.load(bus_stops_file)["data"]
+
+    result_list = list(
+        filter(lambda x: x["ServiceNo"] == str(bus_code), bus_routes_data)
+    )
+
+    def get_sequence(val):
+        return float(val.get("StopSequence"))
+
+    result_list.sort(key=get_sequence)
+    if len(result_list) != 0:
+        for bus_stop in result_list:
+            filter_result = list(
+                filter(
+                    lambda x: x["BusStopCode"] == str(bus_stop["BusStopCode"]),
+                    bus_stops_data,
+                )
+            )
+            bus_stop["Location"] = filter_result[0]
+
+    return jsonify(
+        {
+            "info": result_list,
+        }
+    )
+    # return "invalid bus stop code"
