@@ -43,30 +43,57 @@ def get_taxi_availability():
 def get_checkpoint_details():
     region = "EU"
 
+    # Woodlands - to Singapore
     from_address = "1.47186658,103.76543999"
     to_address = "1.44339074,103.76849771"
     route = WazeRouteCalculator.WazeRouteCalculator(from_address, to_address, region)
-    my_to_sg = route.calc_all_routes_info()
-    my_to_sg_key = next(iter(my_to_sg))
+    woodlands_my_to_sg = route.calc_all_routes_info()
+    woodlands_my_to_sg_key = next(iter(woodlands_my_to_sg))
 
+    # Woodlands - to Malaysia
     from_address = "1.4405914,103.76820803"
     to_address = "1.46639667,103.76833677"
     route = WazeRouteCalculator.WazeRouteCalculator(from_address, to_address, region)
-    sg_to_my = route.calc_all_routes_info()
-    sg_to_my_key = next(iter(sg_to_my))
+    woodlands_sg_to_my = route.calc_all_routes_info()
+    woodlands_sg_to_my_key = next(iter(woodlands_sg_to_my))
+
+    # Tuas - to Singapore
+    from_address = "1.37998112,103.59517336"
+    to_address = "1.34273039,103.64279866"
+    route = WazeRouteCalculator.WazeRouteCalculator(from_address, to_address, region)
+    tuas_my_to_sg = route.calc_all_routes_info()
+    tuas_my_to_sg_key = next(iter(tuas_my_to_sg))
+
+    # Tuas - to Malaysia
+    from_address = "1.34647372,103.63844275"
+    to_address = "1.37956281,103.59533429"
+    route = WazeRouteCalculator.WazeRouteCalculator(from_address, to_address, region)
+    tuas_sg_to_my = route.calc_all_routes_info()
+    tuas_sg_to_my_key = next(iter(tuas_sg_to_my))
 
     output_routes = {
-        "my_to_sg": {
-            "route": my_to_sg_key,
-            "time": my_to_sg[my_to_sg_key][0],
-            "distance": my_to_sg[my_to_sg_key][1],
+        "woodlands_my_to_sg": {
+            "route": woodlands_my_to_sg_key,
+            "time": woodlands_my_to_sg[woodlands_my_to_sg_key][0],
+            "distance": woodlands_my_to_sg[woodlands_my_to_sg_key][1],
         },
-        "sg_to_my": {
-            "route": my_to_sg_key,
-            "time": sg_to_my[sg_to_my_key][0],
-            "distance": sg_to_my[sg_to_my_key][1],
+        "woodlands_sg_to_my": {
+            "route": woodlands_sg_to_my,
+            "time": woodlands_sg_to_my[woodlands_sg_to_my_key][0],
+            "distance": woodlands_sg_to_my[woodlands_sg_to_my_key][1],
+        },
+        "tuas_my_to_sg": {
+            "route": tuas_my_to_sg_key,
+            "time": tuas_my_to_sg[tuas_my_to_sg_key][0],
+            "distance": tuas_my_to_sg[tuas_my_to_sg_key][1],
+        },
+        "tuas_sg_to_my": {
+            "route": tuas_sg_to_my,
+            "time": tuas_sg_to_my[tuas_sg_to_my_key][0],
+            "distance": tuas_sg_to_my[tuas_sg_to_my_key][1],
         },
     }
+    print(output_routes)
     return jsonify(output_routes)
 
 
