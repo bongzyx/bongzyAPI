@@ -4,3 +4,4 @@ python_dotenv
 pillow
 requests
 xmltodict
+WazeRouteCalculator
