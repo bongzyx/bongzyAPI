@@ -74,23 +74,23 @@ def get_checkpoint_details():
     output_routes = {
         "woodlands_my_to_sg": {
             "route": woodlands_my_to_sg_key,
-            "time": woodlands_my_to_sg[woodlands_my_to_sg_key][0],
-            "distance": woodlands_my_to_sg[woodlands_my_to_sg_key][1],
+            "time": round(woodlands_my_to_sg[woodlands_my_to_sg_key][0]),
+            "distance": round(woodlands_my_to_sg[woodlands_my_to_sg_key][1], 2),
         },
         "woodlands_sg_to_my": {
             "route": woodlands_sg_to_my_key,
-            "time": woodlands_sg_to_my[woodlands_sg_to_my_key][0],
-            "distance": woodlands_sg_to_my[woodlands_sg_to_my_key][1],
+            "time": round(woodlands_sg_to_my[woodlands_sg_to_my_key][0]),
+            "distance": round(woodlands_sg_to_my[woodlands_sg_to_my_key][1], 2),
         },
         "tuas_my_to_sg": {
             "route": tuas_my_to_sg_key,
-            "time": tuas_my_to_sg[tuas_my_to_sg_key][0],
-            "distance": tuas_my_to_sg[tuas_my_to_sg_key][1],
+            "time": round(tuas_my_to_sg[tuas_my_to_sg_key][0]),
+            "distance": round(tuas_my_to_sg[tuas_my_to_sg_key][1], 2),
         },
         "tuas_sg_to_my": {
             "route": tuas_sg_to_my_key,
-            "time": tuas_sg_to_my[tuas_sg_to_my_key][0],
-            "distance": tuas_sg_to_my[tuas_sg_to_my_key][1],
+            "time": round(tuas_sg_to_my[tuas_sg_to_my_key][0]),
+            "distance": round(tuas_sg_to_my[tuas_sg_to_my_key][1], 2),
         },
     }
     print(output_routes)

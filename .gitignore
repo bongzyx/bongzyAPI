@@ -76,3 +76,4 @@ Temporary Items
 .DS_Store
 .vscode/settings.json
 utils/tempCodeRunnerFile.py
+utils/scrape_carpark_rates.py
