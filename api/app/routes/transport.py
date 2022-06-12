@@ -78,7 +78,7 @@ def get_checkpoint_details():
             "distance": woodlands_my_to_sg[woodlands_my_to_sg_key][1],
         },
         "woodlands_sg_to_my": {
-            "route": woodlands_sg_to_my,
+            "route": woodlands_sg_to_my_key,
             "time": woodlands_sg_to_my[woodlands_sg_to_my_key][0],
             "distance": woodlands_sg_to_my[woodlands_sg_to_my_key][1],
         },
@@ -88,7 +88,7 @@ def get_checkpoint_details():
             "distance": tuas_my_to_sg[tuas_my_to_sg_key][1],
         },
         "tuas_sg_to_my": {
-            "route": tuas_sg_to_my,
+            "route": tuas_sg_to_my_key,
             "time": tuas_sg_to_my[tuas_sg_to_my_key][0],
             "distance": tuas_sg_to_my[tuas_sg_to_my_key][1],
         },
