@@ -8,6 +8,7 @@ import requests
 import io
 import re
 from PIL import Image, ImageDraw, ImageFont
+import WazeRouteCalculator
 
 
 transport = Blueprint("transport", __name__, url_prefix="/transport")
@@ -36,6 +37,37 @@ def get_taxi_availability():
     )
     data = json.loads(r.content)
     return data
+
+
+@transport.get("/checkpoint")
+def get_checkpoint_details():
+    region = "EU"
+
+    from_address = "1.47186658,103.76543999"
+    to_address = "1.44339074,103.76849771"
+    route = WazeRouteCalculator.WazeRouteCalculator(from_address, to_address, region)
+    my_to_sg = route.calc_all_routes_info()
+    my_to_sg_key = next(iter(my_to_sg))
+
+    from_address = "1.4405914,103.76820803"
+    to_address = "1.46639667,103.76833677"
+    route = WazeRouteCalculator.WazeRouteCalculator(from_address, to_address, region)
+    sg_to_my = route.calc_all_routes_info()
+    sg_to_my_key = next(iter(sg_to_my))
+
+    output_routes = {
+        "my_to_sg": {
+            "route": my_to_sg_key,
+            "time": my_to_sg[my_to_sg_key][0],
+            "distance": my_to_sg[my_to_sg_key][1],
+        },
+        "sg_to_my": {
+            "route": my_to_sg_key,
+            "time": sg_to_my[sg_to_my_key][0],
+            "distance": sg_to_my[sg_to_my_key][1],
+        },
+    }
+    return jsonify(output_routes)
 
 
 @transport.get("/camera")
