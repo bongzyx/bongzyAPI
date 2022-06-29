@@ -31,6 +31,10 @@ def get_mediacorp_station():
         "WARNA942FMAAC",
         "RIA897FMAAC",
         "OLI968FMAAC",
+        "KISS_92AAC",
+        "ONE_FM_913AAC",
+        "HAO_963AAC",
+        "UFM_1003AAC",
     ]
     if stationName in station_list:
         r = requests.get(
